@@ -6,24 +6,29 @@ from kmeans import (
     generate_k,
     assign_points,
     update_centers
-    )
+)
 
 
 class TestKMeans(object):
 
-    def pytest_funcarg__two_dimensional_points(self, request):
+    @pytest.fixture
+    def two_dimensional_points(self, request):
         return ((0, 10), (5, 15))
 
-    def pytest_funcarg__three_dimensional_points(self, request):
+    @pytest.fixture
+    def three_dimensional_points(self, request):
         return ((1, 2, 6), (2, 3, 8), (4, 5, 3), (6, 7, 0))
 
-    def pytest_funcarg__data_set(self, request):
+    @pytest.fixture
+    def data_set(self, request):
         return ((0, 1), (1, 2), (1, 3), (10, 9), (11, 8), (9, 7))
 
-    def pytest_funcarg__assignments(self, request):
+    @pytest.fixture
+    def assignments(self, request):
         return [0, 0, 0, 1, 1, 1]
 
-    def pytest_funcarg__centers(self, request):
+    @pytest.fixture
+    def centers(self, request):
         return [[.67, 2.0], [10.0, 8.0]]
 
     def test_point_avg(self, two_dimensional_points, three_dimensional_points):
@@ -35,14 +40,14 @@ class TestKMeans(object):
         assert distance(*two_dimensional_points) < 7.08
 
     def test_generate_k_two_dimensions(self, two_dimensional_points):
-        for i in xrange(1000):
+        for i in range(1000):
             centers = generate_k(two_dimensional_points, 10)
             for point in centers:
                 assert 0 < point[0] < 10
                 assert 5 < point[1] < 15
 
     def test_generate_k_three_dimensions(self, three_dimensional_points):
-        for i in xrange(1000):
+        for i in range(1000):
             centers = generate_k(three_dimensional_points, 10)
             for point in centers:
                 assert 1 < point[0] < 6
@@ -61,4 +66,3 @@ class TestKMeans(object):
 
     def test_assign_points(self, data_set, centers, assignments):
         assert assign_points(data_set, centers) == assignments
-
